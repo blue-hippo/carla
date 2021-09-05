@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 USER root
 
@@ -9,7 +9,7 @@ RUN apt-get update ; \
   apt-get install -y wget software-properties-common && \
   add-apt-repository ppa:ubuntu-toolchain-r/test && \
   wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|apt-key add - && \
-  apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main" && \
+  apt-add-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal main" && \
   apt-get update ; \
   apt-get install -y build-essential \
     clang-8 \
@@ -18,9 +18,6 @@ RUN apt-get update ; \
     cmake \
     ninja-build \
     libvulkan1 \
-    python \
-    python-pip \
-    python-dev \
     python3-dev \
     python3-pip \
     libpng-dev \
@@ -40,6 +37,8 @@ RUN apt-get update ; \
   pip3 install distro && \
   update-alternatives --install /usr/bin/clang++ clang++ /usr/lib/llvm-8/bin/clang++ 180 && \
   update-alternatives --install /usr/bin/clang clang /usr/lib/llvm-8/bin/clang 180
+RUN ln -sfn /usr/bin/python3 /usr/bin/python && \
+    ln -sfn /usr/bin/pip3 /usr/bin/pip
 
 RUN useradd -m carla
 COPY --chown=carla:carla . /home/carla
